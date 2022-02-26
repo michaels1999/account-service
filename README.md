@@ -1,3 +1,8 @@
+# account-service Postman collection
+
+In order to see the application endpoints you can access either http://localhost:8080/q/dev/ 
+or import postman collection `account-service.postman_collection.json` included in this project
+
 # account-service Project
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
