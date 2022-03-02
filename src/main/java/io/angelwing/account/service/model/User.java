@@ -12,7 +12,7 @@ import javax.validation.constraints.Email;
 import java.util.Collection;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user_table")
 public class User {
 
     @Id

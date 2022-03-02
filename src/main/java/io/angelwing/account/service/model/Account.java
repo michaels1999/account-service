@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "account")
+@Table(name = "account_table")
 public class Account {
 
     @Id

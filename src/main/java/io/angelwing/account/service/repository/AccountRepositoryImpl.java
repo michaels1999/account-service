@@ -5,10 +5,8 @@ import io.angelwing.account.service.model.User;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,18 +19,26 @@ public class AccountRepositoryImpl implements AccountRepository {
 
     @Override
     public Collection<Account> findAll() {
-        return entityManager.createQuery("from Account" , Account.class).getResultList();
+        return (Collection<Account>) entityManager
+                .createStoredProcedureQuery("find_all_accounts", Account.class)
+                .getResultList();
     }
 
     @Override
     public Optional<Account> findById(final UUID id) {
-        return Optional.ofNullable(entityManager.find(Account.class , id));
+        return Optional.ofNullable((Account) entityManager
+                .createStoredProcedureQuery("find_account_by_id", Account.class)
+                .registerStoredProcedureParameter("_account_id", String.class, ParameterMode.IN)
+                .setParameter("_account_id", id.toString())
+                .getSingleResult());
     }
 
     @Override
     public Collection<Account> findByUser(final User user) {
-        return entityManager.createQuery("from Account where user_email = ?1", Account.class)
-                .setParameter(1, user.getEmail())
+        return (Collection<Account>) entityManager
+                .createStoredProcedureQuery("find_all_accounts_by_user_email", Account.class)
+                .registerStoredProcedureParameter("_user_email", String.class, ParameterMode.IN)
+                .setParameter("_user_email", user.getEmail())
                 .getResultList();
     }
 }
